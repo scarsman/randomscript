@@ -7,7 +7,7 @@
 
 timeToday=$(date)
 today=`date +%Y-%m-%d`
-mariadb_status=`systemctl status mysql.service |  grep -q -w 'inactive\|failed' && echo 'inactive' || echo 'active'`
+mariadb_status=`systemctl status mariadb.service |  grep -q -w 'inactive\|failed' && echo 'inactive' || echo 'active'`
 
 
 if [ $mariadb_status == 'inactive' ]; then
@@ -43,8 +43,8 @@ if [ $mariadb_status == 'inactive' ]; then
         echo "" >> /tmp/mysql-$today.log
         echo "" >> /tmp/mysql-$today.log
         journalctl -u mariadb | tail -n 30 >> /tmp/mysql-$today.log
-        systemctl start mysql.service
-        mariadb_status_now=`systemctl status mysql.service |  grep -q -w 'inactive\|failed' && echo 'inactive' || echo 'active'` 
+        systemctl start mariadb.service
+        mariadb_status_now=`systemctl status mariadb.service |  grep -q -w 'inactive\|failed' && echo 'inactive' || echo 'active'` 
         echo "" >> /tmp/mysql-$today.log
         echo "Mariadb status now: $mariadb_status_now" >> /tmp/mysql-$today.log
 
