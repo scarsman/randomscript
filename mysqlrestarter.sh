@@ -29,7 +29,7 @@ if [ $service_status == 'inactive' ]; then
                         echo "Send last 30 lines of logs from file"
                         tail -n 30 /tmp/$service-$today.log > /tmp/sentToEmail.log
                         echo -e "$service status: $service_status\nMore than 5 attempts to restart the $service service.\n\nAdditional info: \n\n $(cat /tmp/sentToEmail.log)" > /tmp/sentToEmail.log
-                        sendEmail -f "sender@gmail.com" -u "Alert: Mysql-Error from [$HOSTNAME] needs attention" -t "receiver@doamin.com" -cc="anotherreceiver@domain.com" -s "smtp.gmail.com:587" -o tls=yes -xu "sender@gmail.com" -xp "password" -o message-file="/tmp/sentToEmail.log" > /dev/null
+                        /usr/local/bin/sendEmail -f "sender@gmail.com" -u "Alert: Mysql-Error from [$HOSTNAME] needs attention" -t "receiver@doamin.com" -cc="anotherreceiver@domain.com" -s "smtp.gmail.com:587" -o tls=yes -xu "sender@gmail.com" -xp "password" -o message-file="/tmp/sentToEmail.log" > /dev/null
                         
                         exit 1
 
