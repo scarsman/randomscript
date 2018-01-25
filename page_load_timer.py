@@ -111,7 +111,6 @@ def calculate_page_time(url):
 	
 
 if __name__ == '__main__':
-
 	url = 'https:/itsmycareer.com/'
 	
 	print calculate_page_time(url)
