@@ -8,8 +8,6 @@
 #download selenium, textwrap via pip
 #download the - selenium chrome webdriver via {apt-get install chromium-chromedriver}
 
-
-
 import collections
 import textwrap
 
