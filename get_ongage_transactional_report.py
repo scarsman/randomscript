@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import requests
 import json
 import operator
@@ -9,13 +8,13 @@ import csv
 import datetime
 import time
 
-from types import *
 
 from collections import OrderedDict
 
-X_USERNAME = 'username'
-X_PASSWORD = 'pass'
-X_ACCOUNT_CODE = 'accountcode'
+
+X_USERNAME = ''
+X_PASSWORD = ''
+X_ACCOUNT_CODE = ''
 ONGAGE_URL_API = 'https://api.ongage.net/api/reports/query'
 
 
@@ -74,7 +73,7 @@ def process_ongage_data(start_date, end_date):
                 # print("%s: %s") % (k,v)
 
             # get only gmail and yahoo
-            email_client = ['yahoo.com', 'gmail.com']
+            email_client = ['yahoo.com', 'gmail.com',"others"]
 
             if data['isp_name'] in email_client:
 
@@ -93,7 +92,7 @@ def process_ongage_data(start_date, end_date):
                 format_date = time.strftime('%Y-%m-%d',
                         time.gmtime(float(data['stats_date'])))
 
-                # subtract 1 day to reflect the ongage server time/depend in your timezone. PH is ahead 1 day 
+                # subtract 1 day to reflect the ongage server time
 
                 format_date = datetime.datetime.strptime(format_date,
                         '%Y-%m-%d') - datetime.timedelta(days=1)
@@ -101,19 +100,20 @@ def process_ongage_data(start_date, end_date):
 
                 temp_results.append(temp)
 
-    """sort according to isp_mailing_name"""
+    # sort according to domain................
     temp_results.sort(key=operator.itemgetter('date','isp_mailing_name',
                       'isp_name'))             
 
 
-     """rewrite and regroup the json based on date as key"""
+    # rewrite to regroup based on date
+
     results = {}
 
     for result in temp_results:
 
         # key = result['isp_mailing_name']
         # key = key.strip()
-        # regroup by isp_mailing_name as key
+        # regroup by domain as key
         # if key not in results.keys():
         # ....results[date] = []
 
@@ -128,7 +128,6 @@ def process_ongage_data(start_date, end_date):
         # delete the key we provide............
         # del result["isp_mailing_name"]........
         
-	#remove the date duplication
         del result['date']
         
         sorted(results[date])
@@ -143,39 +142,35 @@ if __name__ == '__main__':
     # subtract 1 day to get the correct results, because today the ongage reporting is ongoing 
     date_today = datetime.datetime.now() - datetime.timedelta(1)
     date_today = date_today.strftime('%Y-%m-%d')
-    start_date = '2018-01-01'
-    
+    start_date = '2018-01-22'
     raw_json = process_ongage_data(start_date, date_today)
     json_string = json.dumps(raw_json, indent=4)
     json_data = json_string.replace("%","")
     
-    print "--JSON RESULT with pretty format----"
-	
+    raw_data = raw_json.items()
+    
+    print "--JSON RESULT----"
     print json_data
-
-
-    """transform json to csv"""
-        
-    #data =  json.loads(json_data)
+    
+    
+    
+    """
+        * Proof of concept json to csv manipulation
+        * transform json to csv
+    """
 
     csv_file = open('temp.csv', 'w')
-
     csvwriter = csv.writer(csv_file)
 
     count = 0
-  
-    raw_data = raw_json.items()
+
+    i = 0
     
     for (key, val) in raw_data:
-
-        new_date_val = {}  
+        new_date = {}
         #key as the first column values 
         for item in val:
-            
-            new_date_val["date"] = key
-            
-            
-            
+            new_date['date'] = key
             if count == 0:
                
                 headers = item.keys()
@@ -185,26 +180,28 @@ if __name__ == '__main__':
                 headers = [x.upper() for x in headers]
 
                 csvwriter.writerow(headers)
-               
+                
                 count +=1
+                
+            joined_list =  new_date.values() + item.values()
             
-            joined_list = new_date_val.values() + item.values()
-            
+            i += 1    
             
             csvwriter.writerow(joined_list)
         
         #add space/new line to looks good    
-        csvwriter.writerow([])
+        #csvwriter.writerow([])
         
-
     csv_file.close()
 
+    "cleaning the csv above"
+
     fields = []
-    
-    """manipulate the csv data """
-    
-    #sort the csv file by date for cleanup
-    
+
+    duplicate_date = []
+
+    index = 0
+
     with open('temp.csv') as temp:
         
         csv_reader = csv.reader(temp)
@@ -218,10 +215,26 @@ if __name__ == '__main__':
             headers = [field for field in fields]
             file_writer = csv.writer(f, delimiter=',')
             file_writer.writerow(headers)
-           
+            
             for row in sortedlist:
-                
-                if any(row): #delete the empty cell from current csv file
+                if any(row): #remove empty row
+                    if row[0] not in duplicate_date:
+                        duplicate_date.append(row[0])
+                    else:
+                        duplicate_date.append("")
+                    
 
+                    row[0] = duplicate_date[index]
 
-                    file_writer.writerow(row)
+                    if row[2] != "gmail.com":
+                        row[1] = ""
+                    print "-----------------------------"    
+                    print "Adding row %s data to csv file" % index    
+                    print "-----------------------------"
+                    print row
+                    print "\n"
+                    
+                    file_writer.writerow(row) 
+                    
+                    index += 1                    
+        
