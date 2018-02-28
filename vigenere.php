@@ -2,11 +2,11 @@
 
 class Vigenere {
     
-    static $alphabet = "abcdefghijklmnopqrstuvwxyz ";
+    private static $alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*()_-+={}[]\\|:;\"'<>,.?/ ";
     
-    static $blockSize = 5;
+    private static $block_size = 5;
     
-    public function get_unique_keys($password) {
+    private function get_unique_keys($password) {
         
         $unique_keys = "";
     
@@ -26,7 +26,6 @@ class Vigenere {
         $temp_alphabet = "";
         $temp_alphabet .= $unique_keys;
         
-        echo $temp_alphabet;
         
         for($i=0; $i < strlen(self::$alphabet); $i++){
             $letter = self::$alphabet[$i];
@@ -36,11 +35,11 @@ class Vigenere {
             }
         }
         
-        for($b=0; $b < self::$blockSize; $b++){
+        for($b=0; $b < self::$block_size; $b++){
             for($i=$b; $i < strlen($temp_alphabet);){
             
                 array_push($mixed_alphabet,$temp_alphabet[$i]);
-                $i = $i + self::$blockSize;
+                $i = $i + self::$block_size;
                 
             }
         }
@@ -83,14 +82,13 @@ class Vigenere {
     
     public function encrypt($password, $msg){
         
-        $password = strtolower($password);
-        $msg = strtolower($msg);
+        //$password = strtolower($password);
+        //$msg = strtolower($msg);
         
         $cipher = [];
         
         $unique_keys = $this->get_unique_keys($password);
         
-        echo $unique_keys.PHP_EOL;
         
         //refer to vigenere table as the key alphabet
         $table = $this->vigenere_table($this->get_mixed_alphabet($unique_keys));
@@ -121,8 +119,8 @@ class Vigenere {
     }
     
     public function decrypt($password, $cipher_msg){
-        $password = strtolower($password);
-        $cipher_msg = strtolower($cipher_msg);
+        //$password = strtolower($password);
+        //$cipher_msg = strtolower($cipher_msg);
         
         $decipher = [];
         
