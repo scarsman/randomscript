@@ -69,9 +69,12 @@ def calculate_page_time(url):
 		options = webdriver.ChromeOptions()
 		
 		#uncomment to run headless
-		#options.add_argument('headless')
+		options.add_argument('headless')
 		
 		options.add_argument('igcognito')
+		
+		#if you run at root
+		options.add_argument('--no-sandbox')
 		
 		#enable for testing desktop
 		#options.add_argument('window-size=1920x1080')
