@@ -4,7 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.utils import formataddr
 from email.header import Header
 
-SMTP_HOST = "mail2.cba.pl"
+SMTP_HOST = "mail52.cdfaba.pl"
 SMTP_PORT = 587
 SMTP_USER = "pol@polperpo.cba.pl"
 SMTP_USER_PASSWORD = "abcd512ddf34E"
