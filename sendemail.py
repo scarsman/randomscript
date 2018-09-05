@@ -7,8 +7,8 @@ from email.header import Header
 SMTP_HOST = "mail2.cba.pl"
 SMTP_PORT = 587
 SMTP_USER = "pol@polperpo.cba.pl"
-SMTP_USER_PASSWORD = "abcd51234E"
-LOCAL_USER="pol@mail.hostingcloud.party"
+SMTP_USER_PASSWORD = "abcd512ddf34E"
+LOCAL_USER="pol@mail.hosstingcloud.party"
 
 msg = MIMEMultipart('alternative')
 msg['From'] = formataddr((str(Header('Pol', 'utf-8')), SMTP_USER))
