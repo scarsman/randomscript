@@ -2,8 +2,8 @@
 #set -x
 
 LOGFILE=/var/log/mail.log
-LOCALUSER=pol@mail.hostingcloud.party
-SENDERUSER=pol@polperpo.cba.pl
+LOCALUSER=pol@mail.hostidfdfngcloud.party
+SENDERUSER=podfafl@polpferpo.cba.pl
 STATUS="sent"
 PYTHONBIN=/usr/bin/python2.7
 PYTHONFILE=/home/pol/scripts/sendemail.py
