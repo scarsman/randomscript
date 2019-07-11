@@ -93,7 +93,9 @@ class IPFSServer:
 			sys.exit(1)
 			
 		source_temp_dir = os.path.expanduser("~")
-
+		
+		log.debug("> Extracting %s" % base_filename)
+		
 		with zipfile.ZipFile(zip_source, "r") as zip_ref:
 			
 			members = zip_ref.namelist()
@@ -102,11 +104,12 @@ class IPFSServer:
 			with open(os.path.join(source_temp_dir, "ipfs.exe"), 'wb') as f: #extract only one file
 				f.write(zip_ref.read('go-ipfs/ipfs.exe'))
 		
+		log.debug(".. Done")
 		source = os.path.join(source_temp_dir, "ipfs.exe")
 		
 		log.debug("> Copying %s to %s" %(source, destination))
-		
 		shutil.copy(source, destination)
+		log.debug(".. Done")
 	
 	def get_ipfs_and_extract(self, ipfs_url=WIN_IPFS_32_BIT):
 		
@@ -121,10 +124,9 @@ class IPFSServer:
 			log.debug("> Downloading %s " %ipfs_url)
 			self.download_file(ipfs_zip_path, ipfs_url)
 			log.debug(".. Done")
+			
 		#extract	zip file
-		log.debug("> Extracting %s" % ipfs_zip_path)
 		self.unzipping(ipfs_zip_path, self.ipfs_dest)
-		log.debug(".. Done")
 
 	def get_winsw_exe(self):
 		filename = WINSW_EXE.split("/")[-1] #original filename
